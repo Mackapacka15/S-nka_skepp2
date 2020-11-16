@@ -29,6 +29,24 @@ namespace Sänka_Skepp
                 Rectangle r9=new Rectangle(300,101,99,99);
                 Rectangle r10=new Rectangle(400,101,99,99);
 
+                Rectangle r11=new Rectangle(0,201,99,99);
+                Rectangle r12=new Rectangle(100,201,99,99);
+                Rectangle r13=new Rectangle(200,201,99,99);
+                Rectangle r14=new Rectangle(300,201,99,99);
+                Rectangle r15=new Rectangle(400,201,99,99);
+
+                Rectangle r16=new Rectangle(0,301,99,99);
+                Rectangle r17=new Rectangle(100,301,99,99);
+                Rectangle r18=new Rectangle(200,301,99,99);
+                Rectangle r19=new Rectangle(300,301,99,99);
+                Rectangle r20=new Rectangle(400,301,99,99);
+
+                Rectangle r21=new Rectangle(0,401,99,99);
+                Rectangle r22=new Rectangle(100,401,99,99);
+                Rectangle r23=new Rectangle(200,401,99,99);
+                Rectangle r24=new Rectangle(300,401,99,99);
+                Rectangle r25=new Rectangle(400,401,99,99);
+
 
                 Raylib.BeginDrawing();
                 Raylib.ClearBackground(Color.BLACK);
@@ -54,11 +72,11 @@ namespace Sänka_Skepp
                         Raylib.DrawLine(i * distance, 1, i * distance, 500, Color.WHITE);
                         Raylib.DrawLine(1, i * distance, 500, i * distance, Color.WHITE);
                         
-                        Raylib.DrawRectangleRec(r6,Color.ORANGE);
-                        Raylib.DrawRectangleRec(r7,Color.RED);
-                        Raylib.DrawRectangleRec(r8,Color.MAGENTA);
-                        Raylib.DrawRectangleRec(r9,Color.MAROON);
-                        Raylib.DrawRectangleRec(r10,Color.SKYBLUE);
+                        Raylib.DrawRectangleRec(r21,Color.ORANGE);
+                        Raylib.DrawRectangleRec(r22,Color.RED);
+                        Raylib.DrawRectangleRec(r23,Color.MAGENTA);
+                        Raylib.DrawRectangleRec(r24,Color.MAROON);
+                        Raylib.DrawRectangleRec(r25,Color.SKYBLUE);
                         
                     }
 
