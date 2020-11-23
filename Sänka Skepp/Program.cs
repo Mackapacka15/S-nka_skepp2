@@ -1,5 +1,8 @@
-﻿using System;
+﻿using System.Security.Cryptography;
+using System.Runtime.Serialization.Json;
+using System;
 using Raylib_cs;
+using System.Numerics;
 using System.Collections.Generic;
 
 namespace Sänka_Skepp
@@ -13,40 +16,26 @@ namespace Sänka_Skepp
             int height = Raylib.GetScreenHeight();
             int width = Raylib.GetScreenWidth();
             string state = "menu";
+            string state2 = "place";
             int distance = 100;
-            int[] playerBoats = new int[5];
+            List<int> playerBoats = new List<int>();
+            List<int> botBoats = new List<int>();
+
+            int whichBoat = 1;
+
+            List<Rectangle> grid = new List<Rectangle>();
+
+            for (int x = 0; x < 5; x++)
+            {
+                for (int y = 0; y < 5; y++)
+                {
+                    Rectangle r = new Rectangle(x * 100, y * 100, 99, 99);
+                    grid.Add(r);
+                }
+            }
+
             while (!Raylib.WindowShouldClose())
             {
-                Rectangle r1 = new Rectangle(0, 1, 99, 99);
-                Rectangle r2 = new Rectangle(100, 1, 99, 99);
-                Rectangle r3 = new Rectangle(200, 1, 99, 99);
-                Rectangle r4 = new Rectangle(300, 1, 99, 99);
-                Rectangle r5 = new Rectangle(400, 1, 99, 99);
-
-                Rectangle r6 = new Rectangle(0, 101, 99, 99);
-                Rectangle r7 = new Rectangle(100, 101, 99, 99);
-                Rectangle r8 = new Rectangle(200, 101, 99, 99);
-                Rectangle r9 = new Rectangle(300, 101, 99, 99);
-                Rectangle r10 = new Rectangle(400, 101, 99, 99);
-
-                Rectangle r11 = new Rectangle(0, 201, 99, 99);
-                Rectangle r12 = new Rectangle(100, 201, 99, 99);
-                Rectangle r13 = new Rectangle(200, 201, 99, 99);
-                Rectangle r14 = new Rectangle(300, 201, 99, 99);
-                Rectangle r15 = new Rectangle(400, 201, 99, 99);
-
-                Rectangle r16 = new Rectangle(0, 301, 99, 99);
-                Rectangle r17 = new Rectangle(100, 301, 99, 99);
-                Rectangle r18 = new Rectangle(200, 301, 99, 99);
-                Rectangle r19 = new Rectangle(300, 301, 99, 99);
-                Rectangle r20 = new Rectangle(400, 301, 99, 99);
-
-                Rectangle r21 = new Rectangle(0, 401, 99, 99);
-                Rectangle r22 = new Rectangle(100, 401, 99, 99);
-                Rectangle r23 = new Rectangle(200, 401, 99, 99);
-                Rectangle r24 = new Rectangle(300, 401, 99, 99);
-                Rectangle r25 = new Rectangle(400, 401, 99, 99);
-
 
                 Raylib.BeginDrawing();
                 Raylib.ClearBackground(Color.BLACK);
@@ -71,15 +60,48 @@ namespace Sänka_Skepp
                     {
                         Raylib.DrawLine(i * distance, 1, i * distance, 500, Color.WHITE);
                         Raylib.DrawLine(1, i * distance, 500, i * distance, Color.WHITE);
-
-                        Raylib.DrawRectangleRec(r21, Color.ORANGE);
-                        Raylib.DrawRectangleRec(r22, Color.RED);
-                        Raylib.DrawRectangleRec(r23, Color.MAGENTA);
-                        Raylib.DrawRectangleRec(r24, Color.MAROON);
-                        Raylib.DrawRectangleRec(r25, Color.SKYBLUE);
-
+                    }
+                    for (int i = 0; i < 25; i++)
+                    {
+                        Raylib.DrawRectangleRec(grid[i], Color.BLUE);
                     }
 
+                    if (state2 == "place")
+                    {
+                        Raylib.DrawText("Place boat nr: " + whichBoat, 50, 510, 20, Color.WHITE);
+
+                        Vector2 mousePosition = new Vector2(Raylib.GetMouseX(), Raylib.GetMouseY());
+
+                        int whichRectangleWasClicked = 0;
+                        for (int i = 0; i < 25; i++)
+                        {
+                            if (Raylib.CheckCollisionPointRec(mousePosition, grid[i]) && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON))
+                            {
+                                whichRectangleWasClicked = i;
+                                playerBoats.Add(whichRectangleWasClicked);
+                                whichBoat++;
+                            }
+                        }
+
+                        for (int i = 0; i < playerBoats.Count; i++)
+                        {
+                            Raylib.DrawRectangleRec(grid[playerBoats[i]], Color.RED);
+                        }
+                        if (whichBoat >= 6)
+                        {
+                            state2 = "botplace";
+                        }
+                    }
+
+                    if (state2 == "botplace")
+                    {
+                        Random generator = new Random();
+
+                        for (int i = 0; i < 5; i++)
+                        {
+
+                        }
+                    }
                 }
                 if (state == "rules")
                 {
