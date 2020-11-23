@@ -17,35 +17,35 @@ namespace Sänka_Skepp
             int[] playerBoats = new int[5];
             while (!Raylib.WindowShouldClose())
             {
-                Rectangle r1=new Rectangle(0,1,99,99);
-                Rectangle r2=new Rectangle(100,1,99,99);
-                Rectangle r3=new Rectangle(200,1,99,99);
-                Rectangle r4=new Rectangle(300,1,99,99);
-                Rectangle r5=new Rectangle(400,1,99,99);
+                Rectangle r1 = new Rectangle(0, 1, 99, 99);
+                Rectangle r2 = new Rectangle(100, 1, 99, 99);
+                Rectangle r3 = new Rectangle(200, 1, 99, 99);
+                Rectangle r4 = new Rectangle(300, 1, 99, 99);
+                Rectangle r5 = new Rectangle(400, 1, 99, 99);
 
-                Rectangle r6=new Rectangle(0,101,99,99);
-                Rectangle r7=new Rectangle(100,101,99,99);
-                Rectangle r8=new Rectangle(200,101,99,99);
-                Rectangle r9=new Rectangle(300,101,99,99);
-                Rectangle r10=new Rectangle(400,101,99,99);
+                Rectangle r6 = new Rectangle(0, 101, 99, 99);
+                Rectangle r7 = new Rectangle(100, 101, 99, 99);
+                Rectangle r8 = new Rectangle(200, 101, 99, 99);
+                Rectangle r9 = new Rectangle(300, 101, 99, 99);
+                Rectangle r10 = new Rectangle(400, 101, 99, 99);
 
-                Rectangle r11=new Rectangle(0,201,99,99);
-                Rectangle r12=new Rectangle(100,201,99,99);
-                Rectangle r13=new Rectangle(200,201,99,99);
-                Rectangle r14=new Rectangle(300,201,99,99);
-                Rectangle r15=new Rectangle(400,201,99,99);
+                Rectangle r11 = new Rectangle(0, 201, 99, 99);
+                Rectangle r12 = new Rectangle(100, 201, 99, 99);
+                Rectangle r13 = new Rectangle(200, 201, 99, 99);
+                Rectangle r14 = new Rectangle(300, 201, 99, 99);
+                Rectangle r15 = new Rectangle(400, 201, 99, 99);
 
-                Rectangle r16=new Rectangle(0,301,99,99);
-                Rectangle r17=new Rectangle(100,301,99,99);
-                Rectangle r18=new Rectangle(200,301,99,99);
-                Rectangle r19=new Rectangle(300,301,99,99);
-                Rectangle r20=new Rectangle(400,301,99,99);
+                Rectangle r16 = new Rectangle(0, 301, 99, 99);
+                Rectangle r17 = new Rectangle(100, 301, 99, 99);
+                Rectangle r18 = new Rectangle(200, 301, 99, 99);
+                Rectangle r19 = new Rectangle(300, 301, 99, 99);
+                Rectangle r20 = new Rectangle(400, 301, 99, 99);
 
-                Rectangle r21=new Rectangle(0,401,99,99);
-                Rectangle r22=new Rectangle(100,401,99,99);
-                Rectangle r23=new Rectangle(200,401,99,99);
-                Rectangle r24=new Rectangle(300,401,99,99);
-                Rectangle r25=new Rectangle(400,401,99,99);
+                Rectangle r21 = new Rectangle(0, 401, 99, 99);
+                Rectangle r22 = new Rectangle(100, 401, 99, 99);
+                Rectangle r23 = new Rectangle(200, 401, 99, 99);
+                Rectangle r24 = new Rectangle(300, 401, 99, 99);
+                Rectangle r25 = new Rectangle(400, 401, 99, 99);
 
 
                 Raylib.BeginDrawing();
@@ -62,7 +62,7 @@ namespace Sänka_Skepp
                     }
                     if (Raylib.IsKeyPressed(KeyboardKey.KEY_H))
                     {
-                        state="rules";
+                        state = "rules";
                     }
                 }
                 if (state == "game")
@@ -71,30 +71,30 @@ namespace Sänka_Skepp
                     {
                         Raylib.DrawLine(i * distance, 1, i * distance, 500, Color.WHITE);
                         Raylib.DrawLine(1, i * distance, 500, i * distance, Color.WHITE);
-                        
-                        Raylib.DrawRectangleRec(r21,Color.ORANGE);
-                        Raylib.DrawRectangleRec(r22,Color.RED);
-                        Raylib.DrawRectangleRec(r23,Color.MAGENTA);
-                        Raylib.DrawRectangleRec(r24,Color.MAROON);
-                        Raylib.DrawRectangleRec(r25,Color.SKYBLUE);
-                        
+
+                        Raylib.DrawRectangleRec(r21, Color.ORANGE);
+                        Raylib.DrawRectangleRec(r22, Color.RED);
+                        Raylib.DrawRectangleRec(r23, Color.MAGENTA);
+                        Raylib.DrawRectangleRec(r24, Color.MAROON);
+                        Raylib.DrawRectangleRec(r25, Color.SKYBLUE);
+
                     }
 
                 }
-                if (state=="rules")
+                if (state == "rules")
                 {
-                    Raylib.DrawText("Rules:",225,250,20,Color.WHITE);
-                    Raylib.DrawText("The rules are simple. First you will place your boats.",50,270,15,Color.WHITE);
-                    Raylib.DrawText("When placing the boats the square you put your boat in will",20,290,15,Color.WHITE);
-                    Raylib.DrawText("become red. When all your boats are placed in the enemy will",20,310,15,Color.WHITE);
-                    Raylib.DrawText("randomize a tile and shoot it. If there is a boat there the tile",20,330,15,Color.WHITE);
-                    Raylib.DrawText("will become red but if it misses the tile will turn blue. Now it's your",20,350,15,Color.WHITE);
-                    Raylib.DrawText("time to attack. Press a tile and the tile will become red if you hit ",20,370,15,Color.WHITE);
-                    Raylib.DrawText("and blue if you miss.",200,390,15,Color.WHITE);
-                    Raylib.DrawText("Press Enter to go back",100,410,25,Color.WHITE);
+                    Raylib.DrawText("Rules:", 225, 250, 20, Color.WHITE);
+                    Raylib.DrawText("The rules are simple. First you will place your boats.", 50, 270, 15, Color.WHITE);
+                    Raylib.DrawText("When placing the boats the square you put your boat in will", 20, 290, 15, Color.WHITE);
+                    Raylib.DrawText("become red. When all your boats are placed in the enemy will", 20, 310, 15, Color.WHITE);
+                    Raylib.DrawText("randomize a tile and shoot it. If there is a boat there the tile", 20, 330, 15, Color.WHITE);
+                    Raylib.DrawText("will become red but if it misses the tile will turn blue. Now it's your", 20, 350, 15, Color.WHITE);
+                    Raylib.DrawText("time to attack. Press a tile and the tile will become red if you hit ", 20, 370, 15, Color.WHITE);
+                    Raylib.DrawText("and blue if you miss.", 200, 390, 15, Color.WHITE);
+                    Raylib.DrawText("Press Enter to go back", 100, 410, 25, Color.WHITE);
                     if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER))
                     {
-                        state="menu";
+                        state = "menu";
                     }
                 }
 
