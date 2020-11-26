@@ -16,7 +16,7 @@ namespace Sänka_Skepp
             int height = Raylib.GetScreenHeight();
             int width = Raylib.GetScreenWidth();
             string state = "menu";
-            string state2 = "place";
+            string state2 = "playerPlace";
             int distance = 100;
             List<int> playerBoats = new List<int>();
             List<int> botBoats = new List<int>();
@@ -47,14 +47,14 @@ namespace Sänka_Skepp
                     Raylib.DrawText("Press H for rules", width / 2 - 110, 300, 20, Color.WHITE);
                     if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER))
                     {
-                        state = "game";
+                        state = "place";
                     }
                     if (Raylib.IsKeyPressed(KeyboardKey.KEY_H))
                     {
                         state = "rules";
                     }
                 }
-                if (state == "game")
+                if (state == "place")
                 {
                     for (int i = 0; i < 6; i++)
                     {
@@ -66,7 +66,7 @@ namespace Sänka_Skepp
                         Raylib.DrawRectangleRec(grid[i], Color.BLUE);
                     }
 
-                    if (state2 == "place")
+                    if (state2 == "playerPlace")
                     {
                         Raylib.DrawText("Place boat nr: " + whichBoat, 50, 510, 20, Color.WHITE);
 
@@ -77,9 +77,13 @@ namespace Sänka_Skepp
                         {
                             if (Raylib.CheckCollisionPointRec(mousePosition, grid[i]) && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON))
                             {
-                                whichRectangleWasClicked = i;
-                                playerBoats.Add(whichRectangleWasClicked);
-                                whichBoat++;
+                                if (!playerBoats.Contains(i))
+                                {
+                                    whichRectangleWasClicked = i;
+                                    playerBoats.Add(whichRectangleWasClicked);
+                                    whichBoat++;
+                                }
+
                             }
                         }
 
@@ -99,7 +103,19 @@ namespace Sänka_Skepp
 
                         for (int i = 0; i < 5; i++)
                         {
-
+                            int p = generator.Next(0, 25);
+                            if (botBoats.Contains(p))
+                            {
+                                p = generator.Next(0, 25);
+                            }
+                            else if (!botBoats.Contains(p))
+                            {
+                                botBoats.Add(p);
+                            }
+                        }
+                        for (int i = 0; i < 5; i++)
+                        {
+                            Raylib.DrawRectangleRec(grid[botBoats[i]], Color.RED);
                         }
                     }
                 }
