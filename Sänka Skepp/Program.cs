@@ -54,6 +54,22 @@ namespace Sänka_Skepp
                         state = "rules";
                     }
                 }
+                if (state == "rules")
+                {
+                    Raylib.DrawText("Rules:", 225, 250, 20, Color.WHITE);
+                    Raylib.DrawText("The rules are simple. First you will place your boats.", 50, 270, 15, Color.WHITE);
+                    Raylib.DrawText("When placing the boats the square you put your boat in will", 20, 290, 15, Color.WHITE);
+                    Raylib.DrawText("become red. When all your boats are placed in the enemy will", 20, 310, 15, Color.WHITE);
+                    Raylib.DrawText("randomize a tile and shoot it. If there is a boat there the tile", 20, 330, 15, Color.WHITE);
+                    Raylib.DrawText("will become red but if it misses the tile will turn green. Now it's your", 20, 350, 15, Color.WHITE);
+                    Raylib.DrawText("time to attack. Press a tile and the tile will become red if you hit ", 20, 370, 15, Color.WHITE);
+                    Raylib.DrawText("and blue if you miss.", 200, 390, 15, Color.WHITE);
+                    Raylib.DrawText("Press Enter to go back", 100, 410, 25, Color.WHITE);
+                    if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER))
+                    {
+                        state = "menu";
+                    }
+                }
                 if (state == "place")
                 {
                     for (int i = 0; i < 6; i++)
@@ -104,39 +120,43 @@ namespace Sänka_Skepp
                         for (int i = 0; i < 5; i++)
                         {
                             int p = generator.Next(0, 25);
-                            if (botBoats.Contains(p))
+                            while (botBoats.Contains(p))
                             {
                                 p = generator.Next(0, 25);
                             }
-                            else if (!botBoats.Contains(p))
-                            {
-                                botBoats.Add(p);
-                            }
+                            botBoats.Add(p);
+
                         }
+                        /*
                         for (int i = 0; i < 5; i++)
                         {
                             Raylib.DrawRectangleRec(grid[botBoats[i]], Color.RED);
                         }
+                        */
                     }
-                }
-                if (state == "rules")
-                {
-                    Raylib.DrawText("Rules:", 225, 250, 20, Color.WHITE);
-                    Raylib.DrawText("The rules are simple. First you will place your boats.", 50, 270, 15, Color.WHITE);
-                    Raylib.DrawText("When placing the boats the square you put your boat in will", 20, 290, 15, Color.WHITE);
-                    Raylib.DrawText("become red. When all your boats are placed in the enemy will", 20, 310, 15, Color.WHITE);
-                    Raylib.DrawText("randomize a tile and shoot it. If there is a boat there the tile", 20, 330, 15, Color.WHITE);
-                    Raylib.DrawText("will become red but if it misses the tile will turn blue. Now it's your", 20, 350, 15, Color.WHITE);
-                    Raylib.DrawText("time to attack. Press a tile and the tile will become red if you hit ", 20, 370, 15, Color.WHITE);
-                    Raylib.DrawText("and blue if you miss.", 200, 390, 15, Color.WHITE);
-                    Raylib.DrawText("Press Enter to go back", 100, 410, 25, Color.WHITE);
-                    if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER))
+                    if (botBoats.Count == 5 && playerBoats.Count == 5)
                     {
-                        state = "menu";
+                        state = "battle";
                     }
                 }
-
-
+                if (state == "battle")
+                {
+                    System.Console.WriteLine(String.Join(',', botBoats));
+                    System.Console.WriteLine("Test");
+                    for (int i = 0; i < 6; i++)
+                    {
+                        Raylib.DrawLine(i * distance, 1, i * distance, 500, Color.WHITE);
+                        Raylib.DrawLine(1, i * distance, 500, i * distance, Color.WHITE);
+                    }
+                    for (int i = 0; i < 25; i++)
+                    {
+                        Raylib.DrawRectangleRec(grid[i], Color.BLUE);
+                    }
+                    for (int i = 0; i < 5; i++)
+                    {
+                        Raylib.DrawRectangleRec(grid[botBoats[i]], Color.RED);
+                    }
+                }
 
                 Raylib.EndDrawing();
             }
