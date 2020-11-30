@@ -18,8 +18,13 @@ namespace Sänka_Skepp
             string state = "menu";
             string state2 = "playerPlace";
             int distance = 100;
+            Random generator = new Random();
             List<int> playerBoats = new List<int>();
             List<int> botBoats = new List<int>();
+            List<int> playerShots = new List<int>();
+            List<int> botShots = new List<int>();
+            List<int> playerHits = new List<int>();
+            List<int> botHits = new List<int>();
 
             int whichBoat = 1;
 
@@ -115,7 +120,7 @@ namespace Sänka_Skepp
 
                     if (state2 == "botplace")
                     {
-                        Random generator = new Random();
+
 
                         for (int i = 0; i < 5; i++)
                         {
@@ -137,6 +142,7 @@ namespace Sänka_Skepp
                     if (botBoats.Count == 5 && playerBoats.Count == 5)
                     {
                         state = "battle";
+                        state2 = "botShot";
                     }
                 }
                 if (state == "battle")
@@ -152,14 +158,45 @@ namespace Sänka_Skepp
                     {
                         Raylib.DrawRectangleRec(grid[i], Color.BLUE);
                     }
-                    for (int i = 0; i < 5; i++)
+
+                    if (state2 == "botShot")
                     {
-                        Raylib.DrawRectangleRec(grid[botBoats[i]], Color.RED);
+                        int p = generator.Next(0, 25);
+                        botShots.Add(p);
+                        didItHit(botShots, botHits, playerBoats);
+                    }
+
+                    if (state2 == "playerShot")
+                    {
+                        Raylib.DrawText("Your turn to shoot.", 50, 510, 20, Color.WHITE);
+
+                        Vector2 mousePosition = new Vector2(Raylib.GetMouseX(), Raylib.GetMouseY());
+
+                        int whichRectangleWasClicked = 0;
+                        for (int i = 0; i < 25; i++)
+                        {
+                            if (Raylib.CheckCollisionPointRec(mousePosition, grid[i]) && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON))
+                            {
+                                if (!playerShots.Contains(i))
+                                {
+                                    whichRectangleWasClicked = i;
+                                    playerShots.Add(whichRectangleWasClicked);
+                                }
+                            }
+                        }
+                        for (int i = 0; i < playerShots.Count; i++)
+                        {
+                            Raylib.DrawRectangleRec(grid[playerShots[i]], Color.RED);
+                        }
                     }
                 }
 
                 Raylib.EndDrawing();
             }
+        }
+        static List didItHit(List<Shots> )
+        {
+
         }
     }
 }
