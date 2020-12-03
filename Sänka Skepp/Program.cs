@@ -147,8 +147,8 @@ namespace Sänka_Skepp
                 }
                 if (state == "battle")
                 {
-                    System.Console.WriteLine(String.Join(',', botBoats));
-                    System.Console.WriteLine("Test");
+                    //System.Console.WriteLine(String.Join(',', botBoats));
+                    //System.Console.WriteLine("Test");
                     for (int i = 0; i < 6; i++)
                     {
                         Raylib.DrawLine(i * distance, 1, i * distance, 500, Color.WHITE);
@@ -163,8 +163,28 @@ namespace Sänka_Skepp
                     {
                         int p = generator.Next(0, 25);
                         botShots.Add(p);
-                        didItHit(botShots, botHits, playerBoats);
+                        for (int i = 0; i < botShots.Count; i++)
+                        {
+                            if (playerBoats.Contains(botShots[i]))
+                            {
+                                botShots.Remove(i);
+                                botHits.Add(i);
+                            }
+                        }
+                        for (int i = 0; i < botShots.Count; i++)
+                        {
+                            try
+                            {
+                                Console.WriteLine("botShots " + botShots[i]);
+                            }
+                            catch
+                            {
+                                Console.WriteLine("botHits " + botHits[i]);
+                            }
+                        }
+                        state2 = "playerShot";
                     }
+
 
                     if (state2 == "playerShot")
                     {
@@ -194,9 +214,6 @@ namespace Sänka_Skepp
                 Raylib.EndDrawing();
             }
         }
-        static List didItHit(List<Shots> )
-        {
 
-        }
     }
 }
