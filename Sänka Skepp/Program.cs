@@ -16,7 +16,7 @@ namespace Sänka_Skepp
             string state = "menu";
             string state2 = "playerPlace";
             int distance = 100;
-            float timer = 10;
+            float timer = 1;
             Random generator = new Random();
             List<int> playerBoats = new List<int>();
             List<int> botBoats = new List<int>();
@@ -86,8 +86,10 @@ namespace Sänka_Skepp
 
                     if (state2 == "playerPlace")
                     {
-                        Raylib.DrawText("Place boat nr: " + whichBoat, 50, 510, 20, Color.WHITE);
-
+                        if (whichBoat < 6)
+                        {
+                            Raylib.DrawText("Place boat nr: " + whichBoat, 50, 510, 20, Color.WHITE);
+                        }
                         Vector2 mousePosition = new Vector2(Raylib.GetMouseX(), Raylib.GetMouseY());
 
                         int whichRectangleWasClicked = 0;
@@ -107,12 +109,10 @@ namespace Sänka_Skepp
                                 }
                             }
                         }
-                        System.Console.WriteLine(String.Join(',', playerBoats));
+                        //System.Console.WriteLine(String.Join(',', playerBoats));
                         for (int i = 0; i < playerBoats.Count; i++)
                         {
                             Raylib.DrawRectangleRec(grid[playerBoats[i]], Color.RED);
-                            System.Console.WriteLine(i);
-
                         }
                         if (whichBoat >= 6)
                         {
@@ -128,7 +128,7 @@ namespace Sänka_Skepp
                     if (state2 == "botplace")
                     {
 
-                        System.Console.WriteLine(String.Join(',', playerBoats));
+                        //System.Console.WriteLine(String.Join(',', playerBoats));
                         for (int i = 0; i < 5; i++)
                         {
                             int p = generator.Next(0, 25);
@@ -173,14 +173,38 @@ namespace Sänka_Skepp
                         if (playerBoats.Contains(p))
                         {
                             botHits.Add(p);
+                            System.Console.WriteLine("hit " + p);
                         }
                         else
                         {
                             botShots.Add(p);
+                            System.Console.WriteLine("shot " + p);
                         }
 
+                        if (botShots.Count > 0)
+                        {
+                            for (int i = 0; i < botShots.Count; i++)
+                            {
+                                System.Console.WriteLine("Ritar");
+                                Raylib.DrawRectangleRec(grid[botShots[i]], Color.GREEN);
+                            }
+
+                        }
+                        if (botHits.Count > 0)
+                        {
+                            for (int i = 0; i < botHits.Count; i++)
+                            {
+                                Raylib.DrawRectangleRec(grid[botHits[i]], Color.RED);
+                                System.Console.WriteLine("Ritar");
+                            }
+                        }
                         timer -= Raylib.GetFrameTime();
-                        state2 = "playerShot";
+                        if (timer < 0)
+                        {
+
+                            state2 = "playerShot";
+                        }
+
                     }
 
 
