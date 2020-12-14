@@ -174,6 +174,10 @@ namespace Sänka_Skepp
                     if (state2 == "botShot")
                     {
                         int p = generator.Next(0, 25);
+                        while (botHits.Contains(p) || botShots.Contains(p))
+                        {
+                            p = generator.Next(0, 25);
+                        }
                         if (playerBoats.Contains(p))
                         {
                             botHits.Add(p);
@@ -194,7 +198,7 @@ namespace Sänka_Skepp
                     {
                         if (didItHit)
                         {
-                            Raylib.DrawText("The bot shot at square " + botShots + " and hit", 50, 530, 20, Color.WHITE);
+                            Raylib.DrawText("The bot shot at square " + botsShot + " and hit", 50, 530, 20, Color.WHITE);
                         }
                         else
                         {
@@ -204,7 +208,6 @@ namespace Sänka_Skepp
                         {
                             for (int i = 0; i < botShots.Count; i++)
                             {
-
                                 Raylib.DrawRectangleRec(grid[botShots[i]], Color.YELLOW);
                             }
 
