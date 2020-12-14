@@ -16,6 +16,7 @@ namespace Sänka_Skepp
             string state = "menu";
             string state2 = "playerPlace";
             int distance = 100;
+            bool playerHasShot = false;
             float timer = 1;
             Random generator = new Random();
             List<int> playerBoats = new List<int>();
@@ -25,6 +26,9 @@ namespace Sänka_Skepp
             List<int> playerHits = new List<int>();
             List<int> botHits = new List<int>();
             int whichBoat = 1;
+            int botsShot = 0;
+            int playersShot = 0;
+            bool didItHit = false;
             List<Rectangle> grid = new List<Rectangle>();
 
             for (int x = 0; x < 5; x++)
@@ -63,9 +67,9 @@ namespace Sänka_Skepp
                     Raylib.DrawText("When placing the boats the square you put your boat in will", 20, 290, 15, Color.WHITE);
                     Raylib.DrawText("become red. When all your boats are placed in the enemy will", 20, 310, 15, Color.WHITE);
                     Raylib.DrawText("randomize a tile and shoot it. If there is a boat there the tile", 20, 330, 15, Color.WHITE);
-                    Raylib.DrawText("will become red but if it misses the tile will turn green. Now it's your", 20, 350, 15, Color.WHITE);
+                    Raylib.DrawText("will become red but if it misses the tile will turn yellow. Now it's your", 20, 350, 15, Color.WHITE);
                     Raylib.DrawText("time to attack. Press a tile and the tile will become red if you hit ", 20, 370, 15, Color.WHITE);
-                    Raylib.DrawText("and blue if you miss.", 200, 390, 15, Color.WHITE);
+                    Raylib.DrawText("and yellow if you miss.", 200, 390, 15, Color.WHITE);
                     Raylib.DrawText("Press Enter to go back", 100, 410, 25, Color.WHITE);
                     if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER))
                     {
@@ -150,11 +154,11 @@ namespace Sänka_Skepp
                     {
                         state = "battle";
                         state2 = "botShot";
+                        timer = 5;
                     }
                 }
                 if (state == "battle")
                 {
-                    timer = 5;
                     //System.Console.WriteLine(String.Join(',', playerBoats));
                     //System.Console.WriteLine("Test");
                     for (int i = 0; i < 6; i++)
@@ -173,20 +177,35 @@ namespace Sänka_Skepp
                         if (playerBoats.Contains(p))
                         {
                             botHits.Add(p);
-                            System.Console.WriteLine("hit " + p);
+                            didItHit = true;
                         }
                         else
                         {
                             botShots.Add(p);
-                            System.Console.WriteLine("shot " + p);
                         }
 
+                        botsShot = p;
+                        state2 = "showBotShot";
+                        timer = 5;
+
+                    }
+
+                    if (state2 == "showBotShot")
+                    {
+                        if (didItHit)
+                        {
+                            Raylib.DrawText("The bot shot at square " + botShots + " and hit", 50, 530, 20, Color.WHITE);
+                        }
+                        else
+                        {
+                            Raylib.DrawText("The bot shot at square " + botsShot + " and missed", 50, 530, 20, Color.WHITE);
+                        }
                         if (botShots.Count > 0)
                         {
                             for (int i = 0; i < botShots.Count; i++)
                             {
-                                System.Console.WriteLine("Ritar");
-                                Raylib.DrawRectangleRec(grid[botShots[i]], Color.GREEN);
+
+                                Raylib.DrawRectangleRec(grid[botShots[i]], Color.YELLOW);
                             }
 
                         }
@@ -195,43 +214,113 @@ namespace Sänka_Skepp
                             for (int i = 0; i < botHits.Count; i++)
                             {
                                 Raylib.DrawRectangleRec(grid[botHits[i]], Color.RED);
-                                System.Console.WriteLine("Ritar");
                             }
                         }
                         timer -= Raylib.GetFrameTime();
                         if (timer < 0)
                         {
-
                             state2 = "playerShot";
+                            playerHasShot = false;
+                            didItHit = false;
                         }
-
                     }
 
 
-                    /* if (state2 == "playerShot")
-                     {
-                         Raylib.DrawText("Your turn to shoot.", 50, 510, 20, Color.WHITE);
+                    if (state2 == "playerShot")
+                    {
 
-                         Vector2 mousePosition = new Vector2(Raylib.GetMouseX(), Raylib.GetMouseY());
+                        Raylib.DrawText("Your turn to shoot.", 50, 510, 20, Color.WHITE);
 
-                         int whichRectangleWasClicked = 0;
-                         for (int i = 0; i < 25; i++)
-                         {
-                             if (Raylib.CheckCollisionPointRec(mousePosition, grid[i]) && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON))
-                             {
-                                 if (!playerShots.Contains(i))
-                                 {
-                                     whichRectangleWasClicked = i;
-                                     playerShots.Add(whichRectangleWasClicked);
-                                 }
-                             }
-                         }
-                         for (int i = 0; i < playerShots.Count; i++)
-                         {
-                             Raylib.DrawRectangleRec(grid[playerShots[i]], Color.RED);
-                         }
-                     } 
-                     */
+                        if (playerShots.Count > 0)
+                        {
+                            for (int i = 0; i < playerShots.Count; i++)
+                            {
+
+                                Raylib.DrawRectangleRec(grid[playerShots[i]], Color.YELLOW);
+                            }
+
+                        }
+                        if (playerHits.Count > 0)
+                        {
+                            for (int i = 0; i < playerHits.Count; i++)
+                            {
+                                Raylib.DrawRectangleRec(grid[playerHits[i]], Color.RED);
+                            }
+                        }
+                        Vector2 mousePosition = new Vector2(Raylib.GetMouseX(), Raylib.GetMouseY());
+
+                        for (int i = 0; i < 25; i++)
+                        {
+                            if (Raylib.CheckCollisionPointRec(mousePosition, grid[i]) && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON))
+                            {
+                                if (!playerShots.Contains(i) && !playerHits.Contains(i))
+                                {
+                                    if (botBoats.Contains(i))
+                                    {
+                                        playerHits.Add(i);
+                                        playerHasShot = true;
+                                        playersShot = i;
+                                        didItHit = true;
+                                    }
+                                    else
+                                    {
+                                        playerShots.Add(i);
+                                        playerHasShot = true;
+                                        playersShot = i;
+                                    }
+
+                                }
+                            }
+                        }
+                        for (int i = 0; i < playerShots.Count; i++)
+                        {
+                            Raylib.DrawRectangleRec(grid[playerShots[i]], Color.RED);
+                        }
+
+                        Raylib.DrawText(playerShots.Count.ToString(), 50, 560, 20, Color.WHITE);
+                        if (playerHasShot)
+                        {
+                            state2 = "showPlayerShots";
+                            System.Console.WriteLine("Test");
+                            timer = 5;
+                        }
+
+                    }
+                    if (state2 == "showPlayerShots")
+                    {
+                        if (didItHit)
+                        {
+                            Raylib.DrawText("You shot at square " + playersShot + " and hit", 50, 530, 20, Color.WHITE);
+                        }
+                        else
+                        {
+                            Raylib.DrawText("You shot at square " + playersShot + " and missed", 50, 530, 20, Color.WHITE);
+                        }
+
+                        if (playerShots.Count > 0)
+                        {
+                            for (int i = 0; i < playerShots.Count; i++)
+                            {
+
+                                Raylib.DrawRectangleRec(grid[playerShots[i]], Color.YELLOW);
+                            }
+
+                        }
+                        if (playerHits.Count > 0)
+                        {
+                            for (int i = 0; i < playerHits.Count; i++)
+                            {
+                                Raylib.DrawRectangleRec(grid[playerHits[i]], Color.RED);
+                            }
+                        }
+                        timer -= Raylib.GetFrameTime();
+                        if (timer < 0)
+                        {
+                            state2 = "botShot";
+                            didItHit = false;
+                        }
+                    }
+
                 }
 
                 Raylib.EndDrawing();
