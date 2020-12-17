@@ -35,7 +35,7 @@ namespace Sänka_Skepp
             {
                 for (int y = 0; y < 5; y++)
                 {
-                    Rectangle r = new Rectangle(x * 100, y * 100, 99, 99);
+                    Rectangle r = new Rectangle(y * 100, x * 100, 99, 99);
                     grid.Add(r);
                 }
             }
@@ -46,6 +46,7 @@ namespace Sänka_Skepp
                 Raylib.BeginDrawing();
                 Raylib.ClearBackground(Color.BLACK);
 
+                //Skriver ut introtext
                 if (state == "menu")
                 {
                     Raylib.DrawText("Welcome to Battleship", width / 2 - 130, 200, 25, Color.WHITE);
@@ -60,6 +61,7 @@ namespace Sänka_Skepp
                         state = "rules";
                     }
                 }
+                //Skriver ut reglerna om spelaren vill
                 if (state == "rules")
                 {
                     Raylib.DrawText("Rules:", 225, 250, 20, Color.WHITE);
@@ -76,8 +78,10 @@ namespace Sänka_Skepp
                         state = "menu";
                     }
                 }
+                //Byter state till att börja placera båtar
                 if (state == "place")
                 {
+                    //Ritar ut griden
                     for (int i = 0; i < 6; i++)
                     {
                         Raylib.DrawLine(i * distance, 1, i * distance, 500, Color.WHITE);
@@ -96,6 +100,7 @@ namespace Sänka_Skepp
                         }
                         Vector2 mousePosition = new Vector2(Raylib.GetMouseX(), Raylib.GetMouseY());
 
+                        //Tar reda på vilken rektangel som clickades och lägger till den som en av spelarens båtar
                         int whichRectangleWasClicked = 0;
                         if (whichBoat < 6)
                         {
@@ -113,13 +118,13 @@ namespace Sänka_Skepp
                                 }
                             }
                         }
-                        //System.Console.WriteLine(String.Join(',', playerBoats));
                         for (int i = 0; i < playerBoats.Count; i++)
                         {
                             Raylib.DrawRectangleRec(grid[playerBoats[i]], Color.RED);
                         }
                         if (whichBoat >= 6)
                         {
+                            //Gör så spelaren hinner se sina båtar innan den byter state
                             timer -= Raylib.GetFrameTime();
                             if (timer < 0)
                             {
@@ -129,10 +134,10 @@ namespace Sänka_Skepp
                         }
                     }
 
+                    //Randomiserar vilka rutor boten ska placera sina båtar på
                     if (state2 == "botplace")
                     {
 
-                        //System.Console.WriteLine(String.Join(',', playerBoats));
                         for (int i = 0; i < 5; i++)
                         {
                             int p = generator.Next(0, 25);
@@ -143,13 +148,9 @@ namespace Sänka_Skepp
                             botBoats.Add(p);
 
                         }
-                        /*
-                        for (int i = 0; i < 5; i++)
-                        {
-                            Raylib.DrawRectangleRec(grid[botBoats[i]], Color.RED);
-                        }
-                        */
+
                     }
+                    //Byter state om båda har fem båtar
                     if (botBoats.Count == 5 && playerBoats.Count == 5)
                     {
                         state = "battle";
@@ -159,8 +160,7 @@ namespace Sänka_Skepp
                 }
                 if (state == "battle")
                 {
-                    //System.Console.WriteLine(String.Join(',', playerBoats));
-                    //System.Console.WriteLine("Test");
+                    //Ritar ut griden
                     for (int i = 0; i < 6; i++)
                     {
                         Raylib.DrawLine(i * distance, 1, i * distance, 500, Color.WHITE);
@@ -171,9 +171,11 @@ namespace Sänka_Skepp
                         Raylib.DrawRectangleRec(grid[i], Color.BLUE);
                     }
 
+                    //Väljer vilken ruta botten ska skjuta på
                     if (state2 == "botShot")
                     {
                         int p = generator.Next(0, 25);
+                        //kollar så botten inte skjuter på samma ställe där den redan skjutit
                         while (botHits.Contains(p) || botShots.Contains(p))
                         {
                             p = generator.Next(0, 25);
@@ -187,13 +189,23 @@ namespace Sänka_Skepp
                         {
                             botShots.Add(p);
                         }
+                        //Tittar om boten har träffat alla spelarens båtar
+                        if (botHits.Count < 4)
+                        {
+                            botsShot = p;
+                            state2 = "showBotShot";
+                            timer = 5;
+                        }
+                        else if (botHits.Count == 5)
+                        {
+                            state = "botWins";
+                        }
 
-                        botsShot = p;
-                        state2 = "showBotShot";
-                        timer = 5;
+
+
 
                     }
-
+                    //Visar bottens skott
                     if (state2 == "showBotShot")
                     {
                         if (didItHit)
@@ -231,9 +243,8 @@ namespace Sänka_Skepp
 
                     if (state2 == "playerShot")
                     {
-
                         Raylib.DrawText("Your turn to shoot.", 50, 510, 20, Color.WHITE);
-
+                        //Ritar ut spelarens föregående skott
                         if (playerShots.Count > 0)
                         {
                             for (int i = 0; i < playerShots.Count; i++)
@@ -250,12 +261,15 @@ namespace Sänka_Skepp
                                 Raylib.DrawRectangleRec(grid[playerHits[i]], Color.RED);
                             }
                         }
+
+                        //Tar reda på vart spelaren clickade och skjuter där
                         Vector2 mousePosition = new Vector2(Raylib.GetMouseX(), Raylib.GetMouseY());
 
                         for (int i = 0; i < 25; i++)
                         {
                             if (Raylib.CheckCollisionPointRec(mousePosition, grid[i]) && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON))
                             {
+                                //Tittar om skottet träffade
                                 if (!playerShots.Contains(i) && !playerHits.Contains(i))
                                 {
                                     if (botBoats.Contains(i))
@@ -275,20 +289,19 @@ namespace Sänka_Skepp
                                 }
                             }
                         }
-                        for (int i = 0; i < playerShots.Count; i++)
-                        {
-                            Raylib.DrawRectangleRec(grid[playerShots[i]], Color.RED);
-                        }
-
-                        Raylib.DrawText(playerShots.Count.ToString(), 50, 560, 20, Color.WHITE);
-                        if (playerHasShot)
+                        //Tittar om spelaren har träffat alla båtar
+                        if (playerHasShot && playerHits.Count <= 4)
                         {
                             state2 = "showPlayerShots";
-                            System.Console.WriteLine("Test");
                             timer = 5;
+                        }
+                        if (playerHits.Count >= 5)
+                        {
+                            state = "playerWins";
                         }
 
                     }
+                    //Visar spelarens skott
                     if (state2 == "showPlayerShots")
                     {
                         if (didItHit)
@@ -323,7 +336,43 @@ namespace Sänka_Skepp
                             didItHit = false;
                         }
                     }
-
+                }
+                //Skriver ut grattis om spelaren eller botten van
+                if (state == "playerWins")
+                {
+                    Raylib.DrawText("Congratulations You Win", width / 2 - 130, 200, 25, Color.WHITE);
+                    Raylib.DrawText("To play again press enter", width / 2 - 125, 250, 20, Color.WHITE);
+                    if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER))
+                    {
+                        state = "reset";
+                    }
+                }
+                if (state == "botWins")
+                {
+                    Raylib.DrawText("Oh no, you lost", width / 2 - 130, 200, 25, Color.WHITE);
+                    Raylib.DrawText("To play again press enter", width / 2 - 125, 250, 20, Color.WHITE);
+                    if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER))
+                    {
+                        state = "reset";
+                    }
+                }
+                //Återställer alla värden till startvärden för att man ska kunna köra igen
+                if (state == "reset")
+                {
+                    state = "menu";
+                    state2 = "playerPlace";
+                    playerHasShot = false;
+                    timer = 1;
+                    playerBoats.Clear();
+                    botBoats.Clear();
+                    playerShots.Clear();
+                    botShots.Clear();
+                    playerHits.Clear();
+                    botHits.Clear();
+                    whichBoat = 1;
+                    botsShot = 0;
+                    playersShot = 0;
+                    didItHit = false;
                 }
 
                 Raylib.EndDrawing();
